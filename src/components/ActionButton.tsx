@@ -10,12 +10,14 @@ type ActionButtonProps = {
   tone?: "primary" | "accent" | "danger" | "neutral";
   busy?: boolean;
   disabled?: boolean;
+  iconOnly?: boolean;
 };
 
 export function ActionButton({
   busy,
   colors,
   disabled,
+  iconOnly,
   icon: Icon,
   label,
   onPress,
@@ -33,6 +35,7 @@ export function ActionButton({
       style={({ pressed }) => [
         styles.button,
         styles[tone],
+        iconOnly && styles.iconOnly,
         (busy || disabled) && styles.disabled,
         pressed && styles.pressed,
       ]}
@@ -42,9 +45,11 @@ export function ActionButton({
       ) : (
         <Icon color={fg} size={18} strokeWidth={2.5} />
       )}
-      <Text style={[styles.label, tone !== "neutral" && styles.inverted]}>
-        {label}
-      </Text>
+      {iconOnly ? null : (
+        <Text style={[styles.label, tone !== "neutral" && styles.inverted]}>
+          {label}
+        </Text>
+      )}
     </Pressable>
   );
 }
@@ -64,6 +69,11 @@ function createStyles(colors: AppColors) {
       paddingHorizontal: 14,
     },
     neutral: {},
+    iconOnly: {
+      minHeight: 44,
+      paddingHorizontal: 0,
+      width: 44,
+    },
     primary: {
       backgroundColor: colors.primary,
       borderColor: colors.primary,

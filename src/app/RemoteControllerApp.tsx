@@ -323,17 +323,10 @@ export function RemoteControllerApp() {
           onPress={() => navigateTo("settings")}
           style={({ pressed }) => [
             styles.settingsButton,
-            activeSection === "settings" && styles.activeSettingsButton,
             pressed && styles.pressed,
           ]}
         >
-          <Settings
-            color={
-              activeSection === "settings" ? colors.primaryText : colors.text
-            }
-            size={20}
-            strokeWidth={2.5}
-          />
+          <Settings color={colors.text} size={20} strokeWidth={2.5} />
         </Pressable>
       </View>
 
@@ -359,6 +352,7 @@ export function RemoteControllerApp() {
               colors={colors}
               icon={ChevronLeft}
               label="Back"
+              iconOnly
               onPress={
                 editingDraft ? closeEditor : () => setDesktopView("connection")
               }
@@ -442,6 +436,7 @@ export function RemoteControllerApp() {
               colors={colors}
               icon={ChevronLeft}
               label="Back"
+              iconOnly
               onPress={goBack}
               tone="neutral"
             />
@@ -480,7 +475,6 @@ export function RemoteControllerApp() {
               lastError={lastError}
               onConnect={connect}
               onDisconnect={disconnect}
-              onRefresh={refreshConfig}
               onSettingsChange={updateSettings}
               settings={settings}
               status={status}
@@ -541,10 +535,6 @@ function createStyles(colors: AppColors) {
       right: 16,
       top: 18,
       width: 44,
-    },
-    activeSettingsButton: {
-      backgroundColor: colors.primary,
-      borderColor: colors.primary,
     },
     title: {
       color: colors.text,

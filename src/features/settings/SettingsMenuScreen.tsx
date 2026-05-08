@@ -30,7 +30,7 @@ import {
   checkForAppUpdate,
   type AvailableUpdate,
 } from "../../services/updateService";
-import { palettes, type AppColors } from "../../theme/palette";
+import type { AppColors } from "../../theme/palette";
 import type { ThemeName } from "../../types/remote";
 
 type MenuSection = "menu" | "general" | "help" | "feedback" | "updates" | "about";
@@ -249,6 +249,7 @@ export function SettingsMenuScreen({
           colors={colors}
           icon={ChevronLeft}
           label="Back"
+          iconOnly
           onPress={goBack}
           tone="neutral"
         />
@@ -340,8 +341,8 @@ export function SettingsMenuScreen({
         {section === "feedback" ? (
           <View style={styles.section}>
             <View style={styles.heroCard}>
-              <Text style={styles.heroTitle}>General Feedback</Text>
-              <Text style={styles.heroText}>
+              <Text style={styles.drawerTitle}>General Feedback</Text>
+              <Text style={styles.drawerText}>
                 How's your experience with Stream Deck so far? We'd love to
                 hear your thoughts. Send ideas, bug reports, or UI notes
                 through the feedback form below.
@@ -353,7 +354,7 @@ export function SettingsMenuScreen({
               icon={Rocket}
               label="Open Feedback Form"
               onPress={openFeedbackForm}
-              tone="primary"
+              tone="neutral"
             />
 
             {feedbackStatus === "error" ? (
@@ -378,8 +379,8 @@ export function SettingsMenuScreen({
         {section === "updates" ? (
           <View style={styles.section}>
             <View style={styles.heroCard}>
-              <Text style={styles.heroTitle}>{APP_CONFIG.name}</Text>
-              <Text style={styles.heroText}>{updateMessage}</Text>
+              <Text style={styles.drawerTitle}>{APP_CONFIG.name}</Text>
+              <Text style={styles.drawerText}>{updateMessage}</Text>
               {availableUpdate?.body ? (
                 <Text style={styles.hint}>{availableUpdate.body}</Text>
               ) : null}
@@ -389,7 +390,7 @@ export function SettingsMenuScreen({
             <ActionButton
               colors={colors}
               icon={RefreshCw}
-              label="Check for Updates"
+              label="Check Again"
               busy={updateStatus === "checking"}
               disabled={updateStatus === "installing"}
               onPress={checkForUpdates}
@@ -485,73 +486,31 @@ function ThemeSwitch({
   theme,
 }: ThemeSwitchProps) {
   const styles = createStyles(colors);
-  const lightActive = theme === "light";
   const darkActive = theme === "dark";
 
   return (
     <View style={styles.themeSwitch}>
-      <Pressable
-        accessibilityRole="switch"
-        accessibilityState={{ checked: lightActive }}
-        onPress={() => onChange("light")}
-        style={({ pressed }) => [
-          styles.themeOption,
-          {
-            backgroundColor: lightActive
-              ? palettes.light.panel
-              : palettes.light.panelAlt,
-            borderColor: lightActive
-              ? palettes.light.primary
-              : palettes.light.border,
-          },
-          pressed && styles.pressed,
-        ]}
-      >
-        <Sun
-          color={lightActive ? palettes.light.primary : palettes.light.text}
-          size={18}
-          strokeWidth={2.4}
-        />
-        <Text
-          style={[
-            styles.themeOptionLabel,
-            { color: palettes.light.text },
-          ]}
-        >
-          Light
-        </Text>
-      </Pressable>
-
+      {theme === "light" ? (
+        <Moon color={colors.text} size={16} strokeWidth={2.4} />
+      ) : (
+        <Sun color={colors.text} size={16} strokeWidth={2.4} />
+      )}
       <Pressable
         accessibilityRole="switch"
         accessibilityState={{ checked: darkActive }}
-        onPress={() => onChange("dark")}
+        onPress={() => onChange(darkActive ? "light" : "dark")}
         style={({ pressed }) => [
-          styles.themeOption,
-          {
-            backgroundColor: darkActive
-              ? palettes.dark.panelAlt
-              : palettes.dark.panel,
-            borderColor: darkActive
-              ? palettes.dark.primary
-              : palettes.dark.border,
-          },
+          styles.themeSwitchTrack,
+          darkActive && styles.activeThemeSwitchTrack,
           pressed && styles.pressed,
         ]}
       >
-        <Moon
-          color={darkActive ? palettes.dark.primary : palettes.dark.text}
-          size={18}
-          strokeWidth={2.4}
-        />
-        <Text
+        <View
           style={[
-            styles.themeOptionLabel,
-            { color: palettes.dark.text },
+            styles.themeSwitchThumb,
+            darkActive && styles.activeThemeSwitchThumb,
           ]}
-        >
-          Dark
-        </Text>
+        />
       </Pressable>
     </View>
   );
@@ -623,7 +582,7 @@ function createStyles(colors: AppColors) {
       borderWidth: 1,
       flexDirection: "row",
       gap: 12,
-      justifyContent: "center",
+      justifyContent: "flex-start",
       minHeight: 48,
       paddingHorizontal: 14,
     },
@@ -648,29 +607,33 @@ function createStyles(colors: AppColors) {
       lineHeight: 18,
     },
     themeSwitch: {
-      backgroundColor: colors.panel,
-      borderColor: colors.border,
-      borderRadius: 999,
-      borderWidth: 1,
-      flexDirection: "row",
-      gap: 6,
-      marginBottom: 8,
-      padding: 5,
-    },
-    themeOption: {
       alignItems: "center",
-      borderRadius: 999,
-      borderWidth: 1,
-      flex: 1,
+      alignSelf: "flex-start",
       flexDirection: "row",
       gap: 8,
-      justifyContent: "center",
-      minHeight: 44,
-      paddingHorizontal: 10,
+      marginBottom: 8,
     },
-    themeOptionLabel: {
-      fontSize: 14,
-      fontWeight: "900",
+    themeSwitchTrack: {
+      backgroundColor: colors.panelAlt,
+      borderColor: colors.borderStrong,
+      borderRadius: 999,
+      borderWidth: 1,
+      height: 28,
+      padding: 2,
+      width: 48,
+    },
+    activeThemeSwitchTrack: {
+      backgroundColor: colors.primary,
+      borderColor: colors.primary,
+    },
+    themeSwitchThumb: {
+      backgroundColor: colors.primaryText,
+      borderRadius: 999,
+      height: 22,
+      width: 22,
+    },
+    activeThemeSwitchThumb: {
+      transform: [{ translateX: 20 }],
     },
     infoCard: {
       backgroundColor: colors.panel,
@@ -720,6 +683,17 @@ function createStyles(colors: AppColors) {
       fontWeight: "700",
       lineHeight: 20,
       textAlign: "center",
+    },
+    drawerTitle: {
+      color: colors.text,
+      fontSize: 20,
+      fontWeight: "900",
+    },
+    drawerText: {
+      color: colors.muted,
+      fontSize: 14,
+      fontWeight: "700",
+      lineHeight: 20,
     },
     author: {
       color: colors.text,

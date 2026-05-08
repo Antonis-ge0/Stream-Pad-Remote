@@ -1,4 +1,4 @@
-import { Plug, RefreshCw, Unplug, Wifi } from "lucide-react-native";
+import { Plug, Unplug, Wifi } from "lucide-react-native";
 import { StyleSheet, Text, View } from "react-native";
 import { ActionButton } from "../../components/ActionButton";
 import { Section } from "../../components/Section";
@@ -12,7 +12,6 @@ type ConnectionPanelProps = {
   lastError: string | null;
   onConnect: () => void;
   onDisconnect: () => void;
-  onRefresh: () => void;
   onSettingsChange: (patch: Partial<RemoteSettings>) => void;
   settings: RemoteSettings;
   status: ConnectionStatus;
@@ -24,7 +23,6 @@ export function ConnectionPanel({
   lastError,
   onConnect,
   onDisconnect,
-  onRefresh,
   onSettingsChange,
   settings,
   status,
@@ -69,22 +67,13 @@ export function ConnectionPanel({
 
       <View style={styles.actionRow}>
         {connected ? (
-          <>
-            <ActionButton
-              colors={colors}
-              icon={RefreshCw}
-              label="Sync"
-              onPress={onRefresh}
-              tone="neutral"
-            />
-            <ActionButton
-              colors={colors}
-              icon={Unplug}
-              label="Disconnect"
-              onPress={onDisconnect}
-              tone="danger"
-            />
-          </>
+          <ActionButton
+            colors={colors}
+            icon={Unplug}
+            label="Disconnect"
+            onPress={onDisconnect}
+            tone="danger"
+          />
         ) : (
           <ActionButton
             busy={status === "connecting"}
