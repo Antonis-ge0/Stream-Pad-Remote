@@ -8,7 +8,7 @@ import {
   View,
 } from "react-native";
 import { ChevronLeft, RefreshCw, Save, Settings, Trash } from "lucide-react-native";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { ActionButton } from "../components/ActionButton";
 import { AppDialog, type AppDialogState } from "../components/AppDialog";
 import { ConnectionPanel } from "../features/connection/ConnectionPanel";
@@ -32,10 +32,13 @@ import type { DeckButton, DeckConfig } from "../types/deck";
 import type { ThemeName, WakeStatus } from "../types/remote";
 
 type AppSection = "home" | "power" | "signIn" | "desktop" | "settings";
+type DesktopView = "connection" | "deck";
 
 export function RemoteControllerApp() {
-  const [theme, setTheme] = useState<ThemeName>("dark");
+  const [theme, setTheme] = useState<ThemeName>("light");
   const [activeSection, setActiveSection] = useState<AppSection>("home");
+  const [sectionHistory, setSectionHistory] = useState<AppSection[]>([]);
+  const [desktopView, setDesktopView] = useState<DesktopView>("connection");
   const [wakeStatus, setWakeStatus] = useState<WakeStatus>("idle");
   const [activeProfileId, setActiveProfileId] = useState<string | null>(null);
   const [editingButtonId, setEditingButtonId] = useState<string | null>(null);
@@ -57,6 +60,19 @@ export function RemoteControllerApp() {
     status,
     triggerButton,
   } = useDeckConnection(settings);
+  const previousConnectionStatus = useRef(status);
+
+  useEffect(() => {
+    if (previousConnectionStatus.current !== "connected" && status === "connected") {
+      setDesktopView("deck");
+    }
+
+    if (status !== "connected") {
+      setDesktopView("connection");
+    }
+
+    previousConnectionStatus.current = status;
+  }, [status]);
 
   useEffect(() => {
     if (!config) {
@@ -114,9 +130,32 @@ export function RemoteControllerApp() {
     setEditingDraft(null);
   }
 
-  function goHome() {
+  function navigateTo(section: AppSection) {
     closeEditor();
-    setActiveSection("home");
+
+    if (section === activeSection) return;
+
+    setSectionHistory((history) => [...history, activeSection]);
+    setActiveSection(section);
+  }
+
+  function goBack() {
+    closeEditor();
+
+    const previousSection = sectionHistory[sectionHistory.length - 1];
+
+    if (!previousSection) {
+      setActiveSection("home");
+      return;
+    }
+
+    setSectionHistory((history) => history.slice(0, -1));
+    setActiveSection(previousSection);
+  }
+
+  function openDesktop() {
+    setDesktopView(status === "connected" ? "deck" : "connection");
+    navigateTo("desktop");
   }
 
   async function wakePc() {
@@ -281,7 +320,7 @@ export function RemoteControllerApp() {
         <Pressable
           accessibilityLabel="Options"
           accessibilityRole="button"
-          onPress={() => setActiveSection("settings")}
+          onPress={() => navigateTo("settings")}
           style={({ pressed }) => [
             styles.settingsButton,
             activeSection === "settings" && styles.activeSettingsButton,
@@ -301,26 +340,28 @@ export function RemoteControllerApp() {
       {activeSection === "home" ? (
         <HomeScreen
           colors={colors}
-          onDesktop={() => setActiveSection("desktop")}
-          onPower={() => setActiveSection("power")}
-          onSignIn={() => setActiveSection("signIn")}
+          onDesktop={openDesktop}
+          onPower={() => navigateTo("power")}
+          onSignIn={() => navigateTo("signIn")}
         />
       ) : activeSection === "settings" ? (
         <SettingsMenuScreen
           colors={colors}
-          onBack={goHome}
+          onBack={goBack}
           onNotice={showNotice}
           onThemeChange={setTheme}
           theme={theme}
         />
-      ) : activeSection === "desktop" && status === "connected" ? (
+      ) : activeSection === "desktop" && status === "connected" && desktopView === "deck" ? (
         <View style={styles.connected}>
           <View style={styles.connectedTopBar}>
             <ActionButton
               colors={colors}
               icon={ChevronLeft}
               label="Back"
-              onPress={editingDraft ? closeEditor : goHome}
+              onPress={
+                editingDraft ? closeEditor : () => setDesktopView("connection")
+              }
               tone="neutral"
             />
             {editingDraft ? (
@@ -401,7 +442,7 @@ export function RemoteControllerApp() {
               colors={colors}
               icon={ChevronLeft}
               label="Back"
-              onPress={goHome}
+              onPress={goBack}
               tone="neutral"
             />
           </View>

@@ -9,7 +9,6 @@ import {
   View,
 } from "react-native";
 import {
-  Check,
   ChevronLeft,
   Download,
   HelpCircle,
@@ -31,7 +30,7 @@ import {
   checkForAppUpdate,
   type AvailableUpdate,
 } from "../../services/updateService";
-import type { AppColors } from "../../theme/palette";
+import { palettes, type AppColors } from "../../theme/palette";
 import type { ThemeName } from "../../types/remote";
 
 type MenuSection = "menu" | "general" | "help" | "feedback" | "updates" | "about";
@@ -300,22 +299,11 @@ export function SettingsMenuScreen({
             <Text style={styles.heading}>Appearance</Text>
             <Text style={styles.hint}>Switch between Dark and Light mode.</Text>
 
-            <View style={styles.choiceRow}>
-              <ThemeChoice
-                active={theme === "dark"}
-                colors={colors}
-                icon={Moon}
-                label="Dark"
-                onPress={() => onThemeChange("dark")}
-              />
-              <ThemeChoice
-                active={theme === "light"}
-                colors={colors}
-                icon={Sun}
-                label="Light"
-                onPress={() => onThemeChange("light")}
-              />
-            </View>
+            <ThemeSwitch
+              colors={colors}
+              onChange={onThemeChange}
+              theme={theme}
+            />
 
             <Text style={styles.heading}>Remote Sections</Text>
             <InfoCard
@@ -401,7 +389,7 @@ export function SettingsMenuScreen({
             <ActionButton
               colors={colors}
               icon={RefreshCw}
-              label="Check Again"
+              label="Check for Updates"
               busy={updateStatus === "checking"}
               disabled={updateStatus === "installing"}
               onPress={checkForUpdates}
@@ -485,45 +473,87 @@ function MenuItem({ colors, icon: Icon, label, onPress }: MenuItemProps) {
   );
 }
 
-type ThemeChoiceProps = {
-  active: boolean;
+type ThemeSwitchProps = {
   colors: AppColors;
-  icon: typeof Moon;
-  label: string;
-  onPress: () => void;
+  onChange: (theme: ThemeName) => void;
+  theme: ThemeName;
 };
 
-function ThemeChoice({
-  active,
+function ThemeSwitch({
   colors,
-  icon: Icon,
-  label,
-  onPress,
-}: ThemeChoiceProps) {
+  onChange,
+  theme,
+}: ThemeSwitchProps) {
   const styles = createStyles(colors);
+  const lightActive = theme === "light";
+  const darkActive = theme === "dark";
 
   return (
-    <Pressable
-      accessibilityRole="button"
-      onPress={onPress}
-      style={({ pressed }) => [
-        styles.choice,
-        active && styles.activeChoice,
-        pressed && styles.pressed,
-      ]}
-    >
-      <Icon
-        color={active ? colors.primaryText : colors.text}
-        size={18}
-        strokeWidth={2.4}
-      />
-      <Text style={[styles.choiceLabel, active && styles.activeChoiceLabel]}>
-        {label}
-      </Text>
-      {active ? (
-        <Check color={colors.primaryText} size={16} strokeWidth={2.8} />
-      ) : null}
-    </Pressable>
+    <View style={styles.themeSwitch}>
+      <Pressable
+        accessibilityRole="switch"
+        accessibilityState={{ checked: lightActive }}
+        onPress={() => onChange("light")}
+        style={({ pressed }) => [
+          styles.themeOption,
+          {
+            backgroundColor: lightActive
+              ? palettes.light.panel
+              : palettes.light.panelAlt,
+            borderColor: lightActive
+              ? palettes.light.primary
+              : palettes.light.border,
+          },
+          pressed && styles.pressed,
+        ]}
+      >
+        <Sun
+          color={lightActive ? palettes.light.primary : palettes.light.text}
+          size={18}
+          strokeWidth={2.4}
+        />
+        <Text
+          style={[
+            styles.themeOptionLabel,
+            { color: palettes.light.text },
+          ]}
+        >
+          Light
+        </Text>
+      </Pressable>
+
+      <Pressable
+        accessibilityRole="switch"
+        accessibilityState={{ checked: darkActive }}
+        onPress={() => onChange("dark")}
+        style={({ pressed }) => [
+          styles.themeOption,
+          {
+            backgroundColor: darkActive
+              ? palettes.dark.panelAlt
+              : palettes.dark.panel,
+            borderColor: darkActive
+              ? palettes.dark.primary
+              : palettes.dark.border,
+          },
+          pressed && styles.pressed,
+        ]}
+      >
+        <Moon
+          color={darkActive ? palettes.dark.primary : palettes.dark.text}
+          size={18}
+          strokeWidth={2.4}
+        />
+        <Text
+          style={[
+            styles.themeOptionLabel,
+            { color: palettes.dark.text },
+          ]}
+        >
+          Dark
+        </Text>
+      </Pressable>
+    </View>
   );
 }
 
@@ -593,17 +623,13 @@ function createStyles(colors: AppColors) {
       borderWidth: 1,
       flexDirection: "row",
       gap: 12,
-      minHeight: 58,
+      justifyContent: "center",
+      minHeight: 48,
       paddingHorizontal: 14,
-      shadowColor: colors.shadow,
-      shadowOffset: { width: 0, height: 8 },
-      shadowOpacity: 1,
-      shadowRadius: 14,
     },
     menuLabel: {
       color: colors.text,
-      flex: 1,
-      fontSize: 16,
+      fontSize: 15,
       fontWeight: "900",
     },
     section: {
@@ -621,35 +647,30 @@ function createStyles(colors: AppColors) {
       fontWeight: "700",
       lineHeight: 18,
     },
-    choiceRow: {
-      flexDirection: "row",
-      gap: 10,
-      marginBottom: 8,
-    },
-    choice: {
-      alignItems: "center",
+    themeSwitch: {
       backgroundColor: colors.panel,
       borderColor: colors.border,
-      borderRadius: 8,
+      borderRadius: 999,
+      borderWidth: 1,
+      flexDirection: "row",
+      gap: 6,
+      marginBottom: 8,
+      padding: 5,
+    },
+    themeOption: {
+      alignItems: "center",
+      borderRadius: 999,
       borderWidth: 1,
       flex: 1,
       flexDirection: "row",
       gap: 8,
-      minHeight: 50,
       justifyContent: "center",
+      minHeight: 44,
       paddingHorizontal: 10,
     },
-    activeChoice: {
-      backgroundColor: colors.primary,
-      borderColor: colors.primary,
-    },
-    choiceLabel: {
-      color: colors.text,
+    themeOptionLabel: {
       fontSize: 14,
       fontWeight: "900",
-    },
-    activeChoiceLabel: {
-      color: colors.primaryText,
     },
     infoCard: {
       backgroundColor: colors.panel,
