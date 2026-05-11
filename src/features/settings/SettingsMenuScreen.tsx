@@ -391,33 +391,43 @@ export function SettingsMenuScreen({
             <View style={styles.heroCard}>
               <Text style={styles.drawerTitle}>{APP_CONFIG.name}</Text>
               <Text style={styles.drawerText}>{updateMessage}</Text>
-              {availableUpdate?.body ? (
-                <Text style={styles.hint}>{availableUpdate.body}</Text>
+              {availableUpdate ? (
+                <Text style={styles.hint}>New Stream Pad update</Text>
               ) : null}
               <Text style={styles.hint}>Current version {APP_CONFIG.version}</Text>
             </View>
 
-            <ActionButton
-              colors={colors}
-              icon={RefreshCw}
-              label="Check Again"
-              busy={updateStatus === "checking"}
-              disabled={updateStatus === "installing"}
-              onPress={checkForUpdates}
-              tone="neutral"
-            />
-
             {updateStatus === "available" || updateStatus === "installing" ? (
+              <View style={styles.updateActionRow}>
+                <ActionButton
+                  colors={colors}
+                  fill
+                  icon={RefreshCw}
+                  label="Check Again"
+                  disabled={updateStatus === "installing"}
+                  onPress={checkForUpdates}
+                  tone="neutral"
+                />
+                <ActionButton
+                  colors={colors}
+                  fill
+                  icon={Download}
+                  label={availableUpdate?.apkUrl ? "Install Update" : "Open Release"}
+                  busy={updateStatus === "installing"}
+                  onPress={installUpdate}
+                  tone="primary"
+                />
+              </View>
+            ) : (
               <ActionButton
                 colors={colors}
-                icon={Download}
-                label={availableUpdate?.apkUrl ? "Install Update" : "Open Release"}
-                busy={updateStatus === "installing"}
-                onPress={installUpdate}
-                tone="primary"
-                variant="drawerPrimary"
+                icon={RefreshCw}
+                label="Check Again"
+                busy={updateStatus === "checking"}
+                onPress={checkForUpdates}
+                tone="neutral"
               />
-            ) : null}
+            )}
 
             {updateStatus === "permission" ? (
               <>
@@ -610,6 +620,10 @@ function createStyles(colors: AppColors) {
     },
     section: {
       gap: 12,
+    },
+    updateActionRow: {
+      flexDirection: "row",
+      gap: 10,
     },
     heading: {
       color: colors.text,

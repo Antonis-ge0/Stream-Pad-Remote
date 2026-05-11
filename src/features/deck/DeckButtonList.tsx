@@ -95,7 +95,7 @@ function createStyles(colors: AppColors) {
     },
     runArea: {
       alignItems: "center",
-      flex: 4,
+      flex: 9,
       flexDirection: "row",
       gap: 12,
       minHeight: 72,
@@ -109,7 +109,7 @@ function createStyles(colors: AppColors) {
       borderLeftWidth: 1,
       flex: 1,
       justifyContent: "center",
-      minWidth: 58,
+      minWidth: 44,
     },
     pressed: {
       opacity: 0.74,

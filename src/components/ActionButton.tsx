@@ -4,6 +4,7 @@ import type { AppColors } from "../theme/palette";
 
 type ActionButtonProps = {
   colors: AppColors;
+  fill?: boolean;
   icon: ComponentType<{ color?: string; size?: number; strokeWidth?: number }>;
   label: string;
   onPress: () => void;
@@ -19,6 +20,7 @@ export function ActionButton({
   busy,
   colors,
   disabled,
+  fill,
   iconOnly,
   icon: Icon,
   label,
@@ -39,6 +41,7 @@ export function ActionButton({
       style={({ pressed }) => [
         styles.button,
         styles[tone],
+        fill && styles.fill,
         size === "compact" && styles.compact,
         variant === "drawerPrimary" && styles.drawerPrimary,
         iconOnly && styles.iconOnly,
@@ -82,6 +85,9 @@ function createStyles(colors: AppColors) {
       paddingHorizontal: 14,
     },
     neutral: {},
+    fill: {
+      flex: 1,
+    },
     compact: {
       flex: 1,
       gap: 6,
