@@ -103,10 +103,10 @@ function createStyles(colors: AppColors) {
       borderRadius: 999,
     },
     onlineDot: {
-      backgroundColor: colors.accent,
+      backgroundColor: "#22c55e",
     },
     offlineDot: {
-      backgroundColor: colors.warning,
+      backgroundColor: "#ef4444",
     },
     endpoint: {
       color: colors.muted,

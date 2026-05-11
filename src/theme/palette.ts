@@ -4,6 +4,7 @@ export type AppColors = {
   bg: string;
   panel: string;
   panelAlt: string;
+  sectionPanel?: string;
   text: string;
   muted: string;
   border: string;

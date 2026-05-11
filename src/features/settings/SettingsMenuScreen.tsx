@@ -577,6 +577,7 @@ function toError(error: unknown) {
 function createStyles(colors: AppColors) {
   return StyleSheet.create({
     root: {
+      backgroundColor: colors.panel,
       flex: 1,
     },
     topBar: {
@@ -662,7 +663,7 @@ function createStyles(colors: AppColors) {
       transform: [{ translateX: 20 }],
     },
     infoCard: {
-      backgroundColor: colors.panel,
+      backgroundColor: colors.sectionPanel ?? colors.panel,
       borderColor: colors.border,
       borderRadius: 8,
       borderWidth: 1,
@@ -681,7 +682,7 @@ function createStyles(colors: AppColors) {
       lineHeight: 19,
     },
     heroCard: {
-      backgroundColor: colors.panel,
+      backgroundColor: colors.sectionPanel ?? colors.panel,
       borderColor: colors.border,
       borderRadius: 8,
       borderWidth: 1,

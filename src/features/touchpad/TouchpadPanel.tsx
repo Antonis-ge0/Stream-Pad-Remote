@@ -189,7 +189,7 @@ function createStyles(colors: AppColors) {
       paddingBottom: 18,
     },
     panel: {
-      backgroundColor: colors.panel,
+      backgroundColor: colors.sectionPanel ?? colors.panel,
       borderColor: colors.border,
       borderRadius: 8,
       borderWidth: 1,
@@ -247,8 +247,8 @@ function createStyles(colors: AppColors) {
     },
     scrollPad: {
       alignItems: "center",
-      backgroundColor: colors.bg,
-      borderColor: colors.border,
+      backgroundColor: colors.panelAlt,
+      borderColor: colors.borderStrong,
       borderRadius: 8,
       borderWidth: 1,
       justifyContent: "center",

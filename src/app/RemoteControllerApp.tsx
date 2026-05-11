@@ -48,8 +48,11 @@ export function RemoteControllerApp() {
   const [editingButtonId, setEditingButtonId] = useState<string | null>(null);
   const [editingDraft, setEditingDraft] = useState<DeckButton | null>(null);
   const [dialog, setDialog] = useState<AppDialogState | null>(null);
+  const baseColors = palettes[theme];
   const colors =
-    activeSection === "home" ? { ...palettes.light, bg: "#ffffff" } : palettes[theme];
+    activeSection === "home"
+      ? { ...palettes.light, bg: "#ffffff" }
+      : { ...baseColors, sectionPanel: baseColors.bg };
   const styles = createStyles(colors);
 
   const { settings, updateSettings } = useRemoteSettings();
@@ -564,7 +567,7 @@ function toError(error: unknown) {
 function createStyles(colors: AppColors) {
   return StyleSheet.create({
     root: {
-      backgroundColor: colors.bg,
+      backgroundColor: colors.panel,
       flex: 1,
     },
     header: {
@@ -610,16 +613,16 @@ function createStyles(colors: AppColors) {
       marginTop: 4,
     },
     statusDot: {
-      backgroundColor: colors.warning,
+      backgroundColor: "#ef4444",
       borderRadius: 999,
       height: 8,
       width: 8,
     },
     connectedDot: {
-      backgroundColor: colors.accent,
+      backgroundColor: "#22c55e",
     },
     connectingDot: {
-      backgroundColor: colors.primary,
+      backgroundColor: "#ef4444",
     },
     subtitle: {
       color: colors.muted,

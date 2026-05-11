@@ -25,7 +25,7 @@ export function Section({ children, colors, eyebrow, title }: SectionProps) {
 function createStyles(colors: AppColors) {
   return StyleSheet.create({
     section: {
-      backgroundColor: colors.panel,
+      backgroundColor: colors.sectionPanel ?? colors.panel,
       borderColor: colors.border,
       borderRadius: 8,
       borderWidth: 1,

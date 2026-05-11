@@ -55,7 +55,7 @@ export function DeckButtonList({
               pressed && styles.pressed,
             ]}
           >
-            <ChevronRight color={colors.muted} size={20} strokeWidth={2.4} />
+            <ChevronRight color={colors.muted} size={16} strokeWidth={2.4} />
           </Pressable>
         </View>
       )}
@@ -95,7 +95,7 @@ function createStyles(colors: AppColors) {
     },
     runArea: {
       alignItems: "center",
-      flex: 9,
+      flex: 95,
       flexDirection: "row",
       gap: 12,
       minHeight: 72,
@@ -107,9 +107,9 @@ function createStyles(colors: AppColors) {
       alignSelf: "stretch",
       borderLeftColor: colors.border,
       borderLeftWidth: 1,
-      flex: 1,
+      flex: 5,
       justifyContent: "center",
-      minWidth: 44,
+      minWidth: 0,
     },
     pressed: {
       opacity: 0.74,
