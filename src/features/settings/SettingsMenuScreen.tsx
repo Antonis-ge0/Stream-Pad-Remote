@@ -448,12 +448,14 @@ export function SettingsMenuScreen({
               />
               <Text style={styles.heroTitle}>{APP_CONFIG.name}</Text>
               <Text style={styles.hint}>Version {APP_CONFIG.version}</Text>
+              <Text style={styles.copyright}>
+                Copyright (c) 2026 Stream Pad Remote
+              </Text>
               <Text style={styles.heroText}>
                 A mobile remote for starting your PC, signing in with a phone
                 keyboard, syncing Stream Pad profiles, and running desktop
                 actions from Android.
               </Text>
-              <Text style={styles.author}>Antonis Georgosopoulos</Text>
             </View>
           </View>
         ) : null}
@@ -497,9 +499,9 @@ function ThemeSwitch({
 }: ThemeSwitchProps) {
   const styles = createStyles(colors);
   const darkActive = theme === "dark";
-  const switchTrackColor = darkActive ? "#101214" : "#ffffff";
-  const switchThumbColor = darkActive ? "#ffffff" : "#101214";
-  const switchBorderColor = darkActive ? "#ffffff" : "#101214";
+  const switchTrackColor = darkActive ? "#ffffff" : "rgba(17, 17, 19, 0.04)";
+  const switchThumbColor = darkActive ? "#111113" : "#ffffff";
+  const switchBorderColor = darkActive ? "#ffffff" : "rgba(17, 17, 19, 0.24)";
 
   return (
     <View style={styles.themeSwitch}>
@@ -707,11 +709,10 @@ function createStyles(colors: AppColors) {
       fontWeight: "700",
       lineHeight: 20,
     },
-    author: {
+    copyright: {
       color: colors.text,
       fontSize: 13,
       fontWeight: "900",
-      marginTop: 6,
     },
     pressed: {
       opacity: 0.74,

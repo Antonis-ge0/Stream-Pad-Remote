@@ -253,7 +253,7 @@ function createStyles(colors: AppColors) {
       borderWidth: 1,
       justifyContent: "center",
       minHeight: 320,
-      width: 72,
+      width: 52,
     },
     scrollText: {
       color: colors.muted,

@@ -34,12 +34,14 @@ import type { ThemeName, WakeStatus } from "../types/remote";
 
 type AppSection = "home" | "power" | "signIn" | "desktop" | "touchpad" | "settings";
 type DesktopView = "connection" | "deck";
+type TouchpadView = "connection" | "pad";
 
 export function RemoteControllerApp() {
   const [theme, setTheme] = useState<ThemeName>("light");
   const [activeSection, setActiveSection] = useState<AppSection>("home");
   const [sectionHistory, setSectionHistory] = useState<AppSection[]>([]);
   const [desktopView, setDesktopView] = useState<DesktopView>("connection");
+  const [touchpadView, setTouchpadView] = useState<TouchpadView>("connection");
   const [wakeStatus, setWakeStatus] = useState<WakeStatus>("idle");
   const [activeProfileId, setActiveProfileId] = useState<string | null>(null);
   const [editingButtonId, setEditingButtonId] = useState<string | null>(null);
@@ -69,10 +71,12 @@ export function RemoteControllerApp() {
   useEffect(() => {
     if (previousConnectionStatus.current !== "connected" && status === "connected") {
       setDesktopView("deck");
+      setTouchpadView("pad");
     }
 
     if (status !== "connected") {
       setDesktopView("connection");
+      setTouchpadView("connection");
     }
 
     previousConnectionStatus.current = status;
@@ -163,6 +167,7 @@ export function RemoteControllerApp() {
   }
 
   function openTouchpad() {
+    setTouchpadView(status === "connected" ? "pad" : "connection");
     navigateTo("touchpad");
   }
 
@@ -434,7 +439,7 @@ export function RemoteControllerApp() {
             />
           )}
         </View>
-      ) : activeSection === "touchpad" && status === "connected" ? (
+      ) : activeSection === "touchpad" && status === "connected" && touchpadView === "pad" ? (
         <View style={styles.connected}>
           <View style={styles.connectedTopBar}>
             <ActionButton
@@ -442,7 +447,7 @@ export function RemoteControllerApp() {
               icon={ChevronLeft}
               label="Back"
               iconOnly
-              onPress={goBack}
+              onPress={() => setTouchpadView("connection")}
               tone="neutral"
             />
           </View>
