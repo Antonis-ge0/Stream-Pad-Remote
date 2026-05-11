@@ -27,6 +27,7 @@ import { TouchpadPanel } from "../features/touchpad/TouchpadPanel";
 import { useBluetoothKeyboard } from "../hooks/useBluetoothKeyboard";
 import { useDeckConnection } from "../hooks/useDeckConnection";
 import { useRemoteSettings } from "../hooks/useRemoteSettings";
+import { quitApp } from "../native/AppQuit";
 import { isValidMacAddress, sendWakeOnLan } from "../services/wakeOnLan";
 import { palettes, type AppColors } from "../theme/palette";
 import type { DeckButton, DeckConfig } from "../types/deck";
@@ -199,6 +200,15 @@ export function RemoteControllerApp() {
     }
   }
 
+  async function quitRemoteApp() {
+    try {
+      disconnect();
+      await quitApp();
+    } catch (error) {
+      showNotice("Quit Failed", toError(error).message);
+    }
+  }
+
   function trigger(buttonId: string) {
     const sent = triggerButton(buttonId, activeProfile?.id);
 
@@ -348,6 +358,7 @@ export function RemoteControllerApp() {
           colors={colors}
           onDesktop={openDesktop}
           onPower={() => navigateTo("power")}
+          onQuit={quitRemoteApp}
           onSignIn={() => navigateTo("signIn")}
           onTouchpad={openTouchpad}
         />

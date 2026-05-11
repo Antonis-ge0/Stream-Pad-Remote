@@ -11,7 +11,8 @@ class BluetoothKeyboardPackage : ReactPackage {
     return listOf(
       BluetoothKeyboardModule(reactContext),
       WakeOnLanModule(reactContext),
-      ApkInstallerModule(reactContext)
+      ApkInstallerModule(reactContext),
+      AppQuitModule(reactContext)
     )
   }
 

@@ -1,5 +1,11 @@
 import { Image, StyleSheet, Text, View } from "react-native";
-import { Keyboard, Monitor, MousePointer2, Power } from "lucide-react-native";
+import {
+  Keyboard,
+  Monitor,
+  MousePointer2,
+  Power,
+  PowerOff,
+} from "lucide-react-native";
 import { ActionButton } from "../../components/ActionButton";
 import type { AppColors } from "../../theme/palette";
 
@@ -7,6 +13,7 @@ type HomeScreenProps = {
   colors: AppColors;
   onDesktop: () => void;
   onPower: () => void;
+  onQuit: () => void;
   onSignIn: () => void;
   onTouchpad: () => void;
 };
@@ -15,6 +22,7 @@ export function HomeScreen({
   colors,
   onDesktop,
   onPower,
+  onQuit,
   onSignIn,
   onTouchpad,
 }: HomeScreenProps) {
@@ -58,6 +66,13 @@ export function HomeScreen({
           label="Touchpad"
           onPress={onTouchpad}
           tone="neutral"
+        />
+        <ActionButton
+          colors={colors}
+          icon={PowerOff}
+          label="Quit"
+          onPress={onQuit}
+          tone="danger"
         />
       </View>
     </View>
