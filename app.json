@@ -2,7 +2,7 @@
   "expo": {
     "name": "Stream Pad Remote",
     "slug": "stream-pad-remote",
-    "version": "0.1.8",
+    "version": "0.1.9",
     "orientation": "portrait",
     "icon": "./assets/128x128@2x.png",
     "scheme": "streampadremote",
@@ -45,7 +45,7 @@
         "foregroundImage": "./assets/128x128@2x.png",
         "backgroundColor": "#101214"
       },
-      "versionCode": 108,
+      "versionCode": 109,
       "usesCleartextTraffic": true,
       "predictiveBackGestureEnabled": false,
       "package": "com.antonis_ge0.streamdeckremote"

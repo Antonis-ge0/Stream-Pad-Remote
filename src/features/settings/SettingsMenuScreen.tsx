@@ -1,6 +1,5 @@
 import { useState } from "react";
 import {
-  Image,
   Linking,
   Pressable,
   ScrollView,
@@ -21,6 +20,7 @@ import {
   Sun,
 } from "lucide-react-native";
 import { ActionButton } from "../../components/ActionButton";
+import { AppLogo } from "../../components/AppLogo";
 import { APP_CONFIG } from "../../config/appConfig";
 import {
   installApkFromUrl,
@@ -442,14 +442,11 @@ export function SettingsMenuScreen({
         {section === "about" ? (
           <View style={styles.section}>
             <View style={[styles.heroCard, styles.aboutCard]}>
-              <Image
-                source={require("../../../assets/128x128.png")}
-                style={styles.aboutLogo}
-              />
+              <AppLogo size={84} />
               <Text style={styles.heroTitle}>{APP_CONFIG.name}</Text>
               <Text style={styles.hint}>Version {APP_CONFIG.version}</Text>
               <Text style={styles.copyright}>
-                Copyright (c) 2026 Stream Pad Remote
+                Copyright (c) 2026 Stream Pad
               </Text>
               <Text style={styles.heroText}>
                 A mobile remote for starting your PC, signing in with a phone
@@ -678,12 +675,6 @@ function createStyles(colors: AppColors) {
     },
     aboutCard: {
       alignItems: "center",
-    },
-    aboutLogo: {
-      height: 84,
-      width: 84,
-      resizeMode: "contain",
-      marginBottom: 4,
     },
     heroTitle: {
       color: colors.text,

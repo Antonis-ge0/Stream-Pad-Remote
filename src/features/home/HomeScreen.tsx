@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import {
   Keyboard,
   Monitor,
@@ -7,6 +7,7 @@ import {
   PowerOff,
 } from "lucide-react-native";
 import { ActionButton } from "../../components/ActionButton";
+import { AppLogo } from "../../components/AppLogo";
 import type { AppColors } from "../../theme/palette";
 
 type HomeScreenProps = {
@@ -31,10 +32,7 @@ export function HomeScreen({
   return (
     <View style={styles.content}>
       <View style={styles.brand}>
-        <Image
-          source={require("../../../assets/128x128.png")}
-          style={styles.logo}
-        />
+        <AppLogo size={116} />
         <Text style={styles.title}>Stream Pad Remote</Text>
       </View>
 
@@ -91,11 +89,6 @@ function createStyles(colors: AppColors) {
     brand: {
       alignItems: "center",
       gap: 16,
-    },
-    logo: {
-      height: 116,
-      width: 116,
-      resizeMode: "contain",
     },
     title: {
       color: colors.text,
