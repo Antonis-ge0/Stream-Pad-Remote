@@ -7,6 +7,7 @@ type ActionButtonProps = {
   icon: ComponentType<{ color?: string; size?: number; strokeWidth?: number }>;
   label: string;
   onPress: () => void;
+  size?: "default" | "compact";
   tone?: "primary" | "accent" | "danger" | "neutral";
   variant?: "default" | "drawerPrimary";
   busy?: boolean;
@@ -22,6 +23,7 @@ export function ActionButton({
   icon: Icon,
   label,
   onPress,
+  size = "default",
   tone = "neutral",
   variant = "default",
 }: ActionButtonProps) {
@@ -37,6 +39,7 @@ export function ActionButton({
       style={({ pressed }) => [
         styles.button,
         styles[tone],
+        size === "compact" && styles.compact,
         variant === "drawerPrimary" && styles.drawerPrimary,
         iconOnly && styles.iconOnly,
         (busy || disabled) && styles.disabled,
@@ -46,10 +49,17 @@ export function ActionButton({
       {busy ? (
         <ActivityIndicator color={fg} />
       ) : (
-        <Icon color={fg} size={18} strokeWidth={2.5} />
+        <Icon color={fg} size={size === "compact" ? 16 : 18} strokeWidth={2.5} />
       )}
       {iconOnly ? null : (
-        <Text style={[styles.label, tone !== "neutral" && styles.inverted]}>
+        <Text
+          numberOfLines={1}
+          style={[
+            styles.label,
+            size === "compact" && styles.compactLabel,
+            tone !== "neutral" && styles.inverted,
+          ]}
+        >
           {label}
         </Text>
       )}
@@ -72,6 +82,12 @@ function createStyles(colors: AppColors) {
       paddingHorizontal: 14,
     },
     neutral: {},
+    compact: {
+      flex: 1,
+      gap: 6,
+      minHeight: 44,
+      paddingHorizontal: 8,
+    },
     iconOnly: {
       minHeight: 44,
       paddingHorizontal: 0,
@@ -106,6 +122,9 @@ function createStyles(colors: AppColors) {
       color: colors.text,
       fontSize: 15,
       fontWeight: "900",
+    },
+    compactLabel: {
+      fontSize: 12,
     },
     inverted: {
       color: colors.primaryText,

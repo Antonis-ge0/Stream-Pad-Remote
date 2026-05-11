@@ -1,18 +1,18 @@
 import Svg, { Circle, Rect } from "react-native-svg";
 
 type AppLogoProps = {
+  cropToIcon?: boolean;
   size: number;
 };
 
-export function AppLogo({ size }: AppLogoProps) {
+export function AppLogo({ cropToIcon = false, size }: AppLogoProps) {
   return (
-    <Svg height={size} viewBox="0 0 256 256" width={size}>
-      <Circle
-        cx="128"
-        cy="128"
-        fill="#ffffff"
-        r="125"
-      />
+    <Svg
+      height={size}
+      viewBox={cropToIcon ? "34 34 188 188" : "0 0 256 256"}
+      width={size}
+    >
+      {cropToIcon ? null : <Circle cx="128" cy="128" fill="#ffffff" r="125" />}
       <Circle
         cx="128"
         cy="128"

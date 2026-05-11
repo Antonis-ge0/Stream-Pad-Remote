@@ -7,13 +7,15 @@ import type { DeckButton } from "../../types/deck";
 type DeckButtonListProps = {
   buttons: DeckButton[];
   colors: AppColors;
-  onSelect: (buttonId: string) => void;
+  onEdit: (buttonId: string) => void;
+  onRun: (buttonId: string) => void;
 };
 
 export function DeckButtonList({
   buttons,
   colors,
-  onSelect,
+  onEdit,
+  onRun,
 }: DeckButtonListProps) {
   const styles = createStyles(colors);
 
@@ -23,27 +25,39 @@ export function DeckButtonList({
       data={buttons}
       keyExtractor={(item) => item.id}
       renderItem={({ item, index }) => (
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel={item.label}
-          onPress={() => onSelect(item.id)}
-          style={({ pressed }) => [
-            styles.row,
-            pressed && styles.pressed,
-          ]}
-        >
-          <Text style={styles.index}>{String(index + 1).padStart(2, "0")}</Text>
-          <RemoteIcon colors={colors} icon={item.icon} size={42} />
-          <View style={styles.textGroup}>
-            <Text numberOfLines={1} style={styles.title}>
-              {item.label || "Untitled button"}
-            </Text>
-            <Text numberOfLines={1} style={styles.meta}>
-              {buttonMeta(item)}
-            </Text>
-          </View>
-          <ChevronRight color={colors.muted} size={20} strokeWidth={2.4} />
-        </Pressable>
+        <View style={styles.row}>
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel={`Run ${item.label || "button"}`}
+            onPress={() => onRun(item.id)}
+            style={({ pressed }) => [
+              styles.runArea,
+              pressed && styles.pressed,
+            ]}
+          >
+            <Text style={styles.index}>{String(index + 1).padStart(2, "0")}</Text>
+            <RemoteIcon colors={colors} icon={item.icon} size={42} />
+            <View style={styles.textGroup}>
+              <Text numberOfLines={1} style={styles.title}>
+                {item.label || "Untitled button"}
+              </Text>
+              <Text numberOfLines={1} style={styles.meta}>
+                {buttonMeta(item)}
+              </Text>
+            </View>
+          </Pressable>
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel={`Edit ${item.label || "button"}`}
+            onPress={() => onEdit(item.id)}
+            style={({ pressed }) => [
+              styles.editArea,
+              pressed && styles.pressed,
+            ]}
+          >
+            <ChevronRight color={colors.muted} size={20} strokeWidth={2.4} />
+          </Pressable>
+        </View>
       )}
       showsVerticalScrollIndicator={false}
     />
@@ -72,17 +86,33 @@ function createStyles(colors: AppColors) {
       borderRadius: 8,
       borderWidth: 1,
       flexDirection: "row",
-      gap: 12,
       minHeight: 72,
-      paddingHorizontal: 12,
+      overflow: "hidden",
       shadowColor: colors.shadow,
       shadowOffset: { width: 0, height: 6 },
       shadowOpacity: 1,
       shadowRadius: 12,
     },
+    runArea: {
+      alignItems: "center",
+      flex: 4,
+      flexDirection: "row",
+      gap: 12,
+      minHeight: 72,
+      paddingLeft: 12,
+      paddingRight: 8,
+    },
+    editArea: {
+      alignItems: "center",
+      alignSelf: "stretch",
+      borderLeftColor: colors.border,
+      borderLeftWidth: 1,
+      flex: 1,
+      justifyContent: "center",
+      minWidth: 58,
+    },
     pressed: {
       opacity: 0.74,
-      transform: [{ scale: 0.99 }],
     },
     index: {
       color: colors.muted,

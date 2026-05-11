@@ -233,7 +233,7 @@ export function DeckButtonEditor({
         icon={Play}
         label="Run Button"
         onPress={() => onRun(button.id)}
-        tone="accent"
+        tone="primary"
       />
     </ScrollView>
   );

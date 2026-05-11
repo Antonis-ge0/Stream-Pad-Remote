@@ -48,7 +48,8 @@ export function RemoteControllerApp() {
   const [editingButtonId, setEditingButtonId] = useState<string | null>(null);
   const [editingDraft, setEditingDraft] = useState<DeckButton | null>(null);
   const [dialog, setDialog] = useState<AppDialogState | null>(null);
-  const colors = palettes[theme];
+  const colors =
+    activeSection === "home" ? { ...palettes.light, bg: "#ffffff" } : palettes[theme];
   const styles = createStyles(colors);
 
   const { settings, updateSettings } = useRemoteSettings();
@@ -312,7 +313,7 @@ export function RemoteControllerApp() {
 
   return (
     <SafeAreaView style={styles.root}>
-      <StatusBar style={theme === "dark" ? "light" : "dark"} />
+      <StatusBar style={activeSection === "home" || theme !== "dark" ? "dark" : "light"} />
 
       <View style={styles.header}>
         {activeSection === "home" ? (
@@ -446,7 +447,8 @@ export function RemoteControllerApp() {
             <DeckButtonList
               buttons={activeProfile.buttons}
               colors={colors}
-              onSelect={openButtonEditor}
+              onEdit={openButtonEditor}
+              onRun={trigger}
             />
           )}
         </View>

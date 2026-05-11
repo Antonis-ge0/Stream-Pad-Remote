@@ -22,7 +22,7 @@ export type AppColors = {
 
 export const palettes: Record<ThemeName, AppColors> = {
   light: {
-    bg: "#ffffff",
+    bg: "#f4f7fb",
     panel: "#ffffff",
     panelAlt: "rgba(17, 17, 19, 0.04)",
     text: "#111113",

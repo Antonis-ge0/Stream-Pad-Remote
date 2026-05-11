@@ -80,6 +80,7 @@ export function KeyboardSignInPanel({
           icon={Bluetooth}
           label={status.registered ? "Disable" : "Enable"}
           onPress={status.registered ? onDisable : onEnable}
+          size="compact"
           tone={status.registered ? "danger" : "primary"}
         />
         <ActionButton
@@ -87,7 +88,17 @@ export function KeyboardSignInPanel({
           icon={RefreshCw}
           label="Refresh"
           onPress={onRefresh}
+          size="compact"
           tone="neutral"
+        />
+        <ActionButton
+          colors={colors}
+          disabled={!ready}
+          icon={LogIn}
+          label="Sign In"
+          onPress={() => onSendKey("ENTER")}
+          size="compact"
+          tone="primary"
         />
       </View>
 
@@ -111,15 +122,6 @@ export function KeyboardSignInPanel({
           ))}
         </View>
       ) : null}
-
-      <ActionButton
-        colors={colors}
-        disabled={!ready}
-        icon={LogIn}
-        label="Sign In"
-        onPress={() => onSendKey("ENTER")}
-        tone="accent"
-      />
 
       <View style={[styles.keypad, !ready && styles.disabledKeypad]}>
         {keypadRows.map((row) => (
@@ -270,8 +272,8 @@ function createStyles(colors: AppColors) {
       justifyContent: "center",
     },
     enterKey: {
-      backgroundColor: colors.accent,
-      borderColor: colors.accent,
+      backgroundColor: colors.primary,
+      borderColor: colors.primary,
     },
     keyLabel: {
       color: colors.text,

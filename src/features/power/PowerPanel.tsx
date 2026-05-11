@@ -60,7 +60,7 @@ export function PowerPanel({
         icon={wakeStatus === "sent" ? Zap : Power}
         label={wakeStatus === "sending" ? "Sending" : "Start PC"}
         onPress={onWake}
-        tone="accent"
+        tone="primary"
       />
     </Section>
   );

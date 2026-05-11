@@ -443,7 +443,7 @@ export function SettingsMenuScreen({
         {section === "about" ? (
           <View style={styles.section}>
             <View style={[styles.heroCard, styles.aboutCard]}>
-              <AppLogo size={84} />
+              <AppLogo cropToIcon size={84} />
               <Text style={styles.heroTitle}>{APP_CONFIG.name}</Text>
               <Text style={styles.hint}>Version {APP_CONFIG.version}</Text>
               <Text style={styles.copyright}>
@@ -702,9 +702,9 @@ function createStyles(colors: AppColors) {
       lineHeight: 20,
     },
     copyright: {
-      color: colors.text,
+      color: colors.muted,
       fontSize: 13,
-      fontWeight: "900",
+      fontWeight: "400",
     },
     pressed: {
       opacity: 0.74,
